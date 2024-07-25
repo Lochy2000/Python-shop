@@ -51,9 +51,6 @@ def validate_data(values):
     return True 
     
 
-
-
-
 def update_worksheet(data,worksheet):
     """
     Recives a list of intergers to be added to worksheet.
@@ -85,6 +82,20 @@ def calculate_surplus_data(sales_row):
     return surplus_data
 
 
+def get_last_5_entries_sales():
+    """
+    collects collumns of data from sales worksheet, collecting last 5 entries for each sandwich and returns data as a list of lists
+    """
+    sales = SHEET.worksheet("sales")
+    # column = sales.col_values(3)
+    #print(column)
+
+    columns = []
+    for ind in range(1, 7):
+        column = sales.col_values(ind)
+        columns.append(column[-5:])
+    pprint(columns)
+
 def main():
     """
     runs the main program functions
@@ -95,7 +106,8 @@ def main():
     new_surplus_data = calculate_surplus_data(sales_data)
     update_worksheet(new_surplus_data, "surplus")   
     
-    print(new_surplus_data)
 
 print("\nWelcome to love sanwiches Data Automation \n")
-main()
+
+#main()
+get_last_5_entries_sales()
