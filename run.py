@@ -1,5 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials
+from pprint import pprint
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -26,7 +27,7 @@ def get_sales_data():
         sales_data = data_str.split(",")
         
         if validate_data(sales_data):
-            print("Data is valid!")
+            print("\nData is valid!")
             break
 
     return sales_data 
@@ -60,8 +61,27 @@ def update_sales_worksheet(data):
     sales_worksheet.append_row(data)
     print("Sales worksheet updates succesfully!\n")
 
+def calculate_surplus_data(sales_row):
+    """
+    Comapre sales with stock and calculate the surplus for each item.
+    The surplus is define as sales figues subtraced by stock:
+    - Posotive surplus indicated waste
+    - Negative indicates extras made
+    """
+    print("Calculating Data surplus\n")
+    stock = SHEET.worksheet("stock").get_all_values()
+    stock_row = stock[-1]
+    print(stock_row)
 
 
-data = get_sales_data()
-sales_data = [int(num) for num in data]
-update_sales_worksheet(sales_data)
+def main():
+    """
+    runs the main program functions
+    """
+    data = get_sales_data()
+    sales_data = [int(num) for num in data]
+    update_sales_worksheet(sales_data)
+    calculate_surplus_data(sales_data)
+
+print("\nWelcome to love sanwiches Data Automation \n")
+main()
